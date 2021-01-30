@@ -1,0 +1,30 @@
+
+services:
+  app:
+    image: ortussolutions/commandbox:latest
+    environment:
+        - PORT=8081
+        - CFENGINE=adobe@2016
+        - DB_NAME=Master
+        - DB_HOST=db
+        - DB_USER=sa
+        - DB_PASSWORD=change_this_password
+    volumes:
+      - .:/app:cached
+    depends_on:
+            - db
+    ports:
+        - 8081:8081
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    environment:
+      SA_PASSWORD: "change_this_password"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    volumes:
+      - mssql-volume:/var/opt/mssql
+
+volumes:
+  mssql-volume:
